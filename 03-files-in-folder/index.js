@@ -11,7 +11,7 @@ async function outputElements () {
         const filePath = path.join(folderPath, elem.name);
         const file = await fs.promises.stat(filePath);
         stdout.write(`${path.parse(elem.name).name} - ${path.parse(elem.name).ext.slice(1)} - ${file.size} byte\n`);
-      };
+    };
   }
 }
 
