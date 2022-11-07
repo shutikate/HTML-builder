@@ -1,8 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const util = require('util');
 
-const promisifiedRm = util.promisify(fs.rm);
 const filePath = path.join(__dirname, 'template.html');
 const newFolderPath = path.join(__dirname, 'project-dist');
 const componentsFolderPath = path.join(__dirname, 'components');
@@ -44,7 +42,7 @@ async function copyFolder (pathForAssets, copyPathForAssets) {
 
 async function buildPage () {
   try {
-    await promisifiedRm(newFolderPath, {force: true, recursive: true});
+    await fs.promises.rm(newFolderPath, {force: true, recursive: true});
     await fs.promises.mkdir(newFolderPath);
     const outputHtml = fs.createWriteStream(path.join(newFolderPath, 'index.html'));
     outputHtml.write(htmlContent);

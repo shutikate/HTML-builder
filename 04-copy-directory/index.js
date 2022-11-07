@@ -1,8 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const util = require('util');
 
-const promisifiedRm = util.promisify(fs.rm);
 const newFolderPath = path.join(__dirname, 'files-copy');
 const folderPath = path.join(__dirname, 'files');
 
@@ -24,7 +22,7 @@ async function copyFolder (pathFiles, pathCopyFiles) {
 
 (async() => {
   try{
-    await promisifiedRm(newFolderPath, {force: true, recursive: true});
+    await fs.promises.rm(newFolderPath, {force: true, recursive: true});
     copyFolder(folderPath, newFolderPath);
     } catch (err) {
       console.log(err);
