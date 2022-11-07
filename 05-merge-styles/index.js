@@ -15,6 +15,6 @@ const createdFile = fs.createWriteStream(path.join(destinationFolder, 'bundle.cs
       }
     }
   } catch (err) {
-    console.err(err);
+    console.log(err);
   }
 })()
