@@ -6,15 +6,27 @@ const promisifiedRm = util.promisify(fs.rm);
 const newFolderPath = path.join(__dirname, 'files-copy');
 const folderPath = path.join(__dirname, 'files');
 
+async function copyFolder (pathFiles, pathCopyFiles) {
+  try{
+    await fs.promises.mkdir(pathCopyFiles);
+    const folderContent = await fs.promises.readdir(pathFiles, {withFileTypes: true});
+    for (const elem of folderContent) {
+      if (!elem.isDirectory()) {
+        await fs.promises.copyFile(path.join(pathFiles, elem.name), path.join(pathCopyFiles, elem.name));
+      } else {
+        copyFolder(path.join(pathFiles, elem.name), path.join(pathCopyFiles, elem.name));
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 (async() => {
   try{
     await promisifiedRm(newFolderPath, {force: true, recursive: true});
-    await fs.promises.mkdir(newFolderPath);
-    const folderContent = await fs.promises.readdir(folderPath, {withFileTypes: true});
-    for (const elem of folderContent) {
-      await fs.promises.copyFile(path.join(folderPath, elem.name), path.join(newFolderPath, elem.name));
+    copyFolder(folderPath, newFolderPath);
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.err(err);
-  }
 })();
